@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang = "pl">
+<head>
+	<meta charset = "UTF-8">
+	<title>formularz</title>
+</head>
+<body>
+	<h1>Formularz rejestracyjny</h1>
+	<form action = "#" method = "post">
+		<label>Imię: 
+			<input type = "text" name = "imie" minlength = "2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+		</label><br><br>
+		
+		<label>Nazwisko: 
+			<input type = "text" name = "nazwisko" minlength = "2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+		</label><br><br>
+		
+		<label>Płeć: 
+			<input type = "radio" name = "plec" value = "kobieta"> Kobieta
+			<input type = "radio" name = "plec" value = "kobieta"> Mężczyzna
+			<input type = "radio" name = "plec" value = "kobieta"> Inna
+		</label><br><br>
+		
+		<label>Data urodzenia: 
+			<input type = "date" name = "data_urodzenia">
+		</label><br><br>
+		
+		<label>Hasło: 
+			<input type = "password" name = "haslo" minlength = "2">
+		</label><br><br>
+		
+		<label>Województwo: 
+			<select name = "wojewodztwo">
+				<option value = "">--Wybierz--</option>
+				<option value = "mazowieckie">Mazowieckie<</option>
+				<option value = "dolnoslaskie">Dolnośląskie<</option>
+				<option value = "kujawsko-pomorskie">Kujawsko-pomorskie<</option>
+				<option value = "lubelskie">Lubelskie<</option>
+				<option value = "lubuskie">Lubuskie<</option>
+				<option value = "łódzkie">Łódzkie<</option>
+				<option value = "małopolskie">Małopolskie<</option>
+				<option value = "opolskie">Opolskie<</option>
+				<option value = "podkarpackie">Podkarpackie<</option>
+				<option value = "podlaskie">Podlaskie<</option>
+				<option value = "pomorskie">Pomorskie<</option>
+				<option value = "śląskie">Śląskie<</option>
+				<option value = "świętokrzyskie">Świętokrzyskie<</option>
+				<option value = "warminsko-mazurskie">Warmińsko-mazurskie<</option>
+				<option value = "wielkopolskie">Wielkopolskie<</option>
+				<option value = "zachodniopomorskie">Zachodniopomorskie<</option>
+		</label><br><br>
+		
+		<label>Miasto: 
+			<input type = "text" name = "miasto" minlength = "2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+		</label><br><br>
+		
+		<label>Ulica: 
+			<input type = "text" name = "ulica" minlength = "2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+		</label><br><br>
+		
+		<label>Telefon: 
+			<input type = "tel" name = "telefon">
+		</label><br><br>
+		
+		<label>E-mail: 
+			<input type = "email" name = "email">
+		</label><br><br>
+		
+		<label>Prawo jazdy: 
+			<input type="radio" name="prawo_jazdy" value="tak"> Tak
+            <input type="radio" name="prawo_jazdy" value="nie"> Nie
+		</label><br><br>
+		
+		<label>Uwagi: 
+			<textarea name="uwagi" rows="4" cols="40" maxlength = "200"></textarea>
+		</label><br><br>
+	</form>
+</body>
+</html>
