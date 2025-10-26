@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Formularz</title>
+  <style>
+    body {
+      margin: 0;
+	  padding: 0;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    .formularz {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    .grupa-radio {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="formularz">
+    <h1>Formularz rejestracyjny</h1>
+    <form action="#" method="post">
+
+      <label>Imię:
+        <input type="text" name="imie" minlength="2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+      </label>
+
+      <label>Nazwisko:
+        <input type="text" name="nazwisko" minlength="2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+      </label>
+
+      <label>Płeć:</label>
+      <div class="grupa-radio">
+        <label><input type="radio" name="plec" value="kobieta"> Kobieta</label>
+        <label><input type="radio" name="plec" value="mezczyzna"> Mężczyzna</label>
+        <label><input type="radio" name="plec" value="inna"> Inna</label>
+      </div>
+
+      <label>Data urodzenia:
+        <input type="date" name="data_urodzenia">
+      </label>
+
+      <label>Hasło:
+        <input type="password" name="haslo" minlength="2">
+      </label>
+
+      <label>Województwo:
+        <select name="wojewodztwo">
+          <option value="">--Wybierz--</option>
+          <option value="mazowieckie">Mazowieckie</option>
+          <option value="dolnoslaskie">Dolnośląskie</option>
+          <option value="kujawsko-pomorskie">Kujawsko-pomorskie</option>
+          <option value="lubelskie">Lubelskie</option>
+          <option value="lubuskie">Lubuskie</option>
+          <option value="łódzkie">Łódzkie</option>
+          <option value="małopolskie">Małopolskie</option>
+          <option value="opolskie">Opolskie</option>
+          <option value="podkarpackie">Podkarpackie</option>
+          <option value="podlaskie">Podlaskie</option>
+          <option value="pomorskie">Pomorskie</option>
+          <option value="śląskie">Śląskie</option>
+          <option value="świętokrzyskie">Świętokrzyskie</option>
+          <option value="warminsko-mazurskie">Warmińsko-mazurskie</option>
+          <option value="wielkopolskie">Wielkopolskie</option>
+          <option value="zachodniopomorskie">Zachodniopomorskie</option>
+        </select>
+      </label>
+
+      <label>Miasto:
+        <input type="text" name="miasto" minlength="2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+      </label>
+
+      <label>Ulica:
+        <input type="text" name="ulica" minlength="2" pattern="[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s]+" title="Tylko litery i spacje">
+      </label>
+
+      <label>Telefon:
+        <input type="tel" name="telefon">
+      </label>
+
+      <label>E-mail:
+        <input type="email" name="email">
+      </label>
+
+      <label>Prawo jazdy:</label>
+      <div class="grupa-radio">
+        <label><input type="radio" name="prawo_jazdy" value="tak"> Tak</label>
+        <label><input type="radio" name="prawo_jazdy" value="nie"> Nie</label>
+      </div>
+
+      <label>Uwagi:
+        <textarea name="uwagi" rows="4" maxlength="200"></textarea>
+      </label>
+
+    </form>
+  </div>
+
+</body>
+</html>
