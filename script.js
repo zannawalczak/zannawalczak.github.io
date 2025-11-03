@@ -108,7 +108,7 @@ let input = "",
         else if (lastChar === "(" || lastChar === ".") return;
         else if (input === "" || isLastCharOperator && lastChar !== "%")
         input += "(";
-    else if (openBracketsCount > close) input += ")";
+    else if (openBracketsCount > closeBracketsCount) input += ")";
         else input += "×(";
     }
     //obsluguje cyfry
@@ -205,3 +205,4 @@ const calculatePercentage = input => {
  buttons.forEach(button => 
     button.addEventListener("click", e => calculate(e.target.textContent))
  );
+
