@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  background-color: #f4f4f4;
+}
+
+.formularz {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-bottom: 50px; /* Dodany margines na dole */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+h1 {
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.pole-formularza {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="password"],
+input[type="tel"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.grupa-radio {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.grupa-radio label {
+    font-weight: normal;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.grupa-radio input[type="radio"] {
+    width: auto;
+}
+
+/* === STYLE DLA WALIDACJI === */
+
+.error-message {
+  color: #d93025;
+  font-size: 0.9em;
+  margin-top: 5px;
+  display: none;
+}
+
+input.invalid,
+select.invalid,
+textarea.invalid {
+  border-color: #d93025;
+  background-color: #fff8f8;
+}
+
+.grupa-radio.invalid {
+    border-color: #d93025;
+    background-color: #fff8f8;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
