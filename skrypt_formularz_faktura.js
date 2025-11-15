@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // WAŻNE: Poniższa linia łączy ten XML z Twoim plikiem XSLT
     // Upewnij się, że plik XSLT nazywa się 'faktura.xsl'
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="faktura.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https://zannawalczak.github.io/faktura.xsl"?>
 <invoice>
     <header>
         <invoiceNumber>${esc(naglowek.numer)}</invoiceNumber>
@@ -233,5 +233,6 @@ document.addEventListener('DOMContentLoaded', function() {
       el.classList.remove('invalid');
     });
   }
+
 
 });
