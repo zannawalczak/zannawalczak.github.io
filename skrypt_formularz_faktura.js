@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### GENERATOR XML (Z NAPRAWIONĄ LITERÓWKĄ) ###
+   * ### GENERATOR XML (Z NAPRAWIONĄ LITERÓWKĄ I ŚCIEŻKĄ) ###
    */
   function generujXML(daneFormularza) {
     
@@ -142,9 +142,13 @@ document.addEventListener('DOMContentLoaded', function() {
         { nazwa: "Opłata rejestracyjna", miara: "szt.", ilosc: 1, cena: 150.00 }
     ];
 
-    // Używamy ścieżki względnej. To jest poprawne dla GitHub Pages.
+    // ### KRYTYCZNA POPRAWKA ŚCIEŻKI ###
+    // Musi być pełny adres URL do pliku XSL na Twoim serwerze GitHub.
+    // Skopiowałem go z Twojego pliku strony.html
+    const sciezkaDoXSL = "https://zannawalczak.github.io/faktura.xsl";
+
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="faktura.xsl"?>
+<?xml-stylesheet type="text/xsl" href="${sciezkaDoXSL}"?>
 <invoice>
     <header>
         <invoiceNumber>${esc(naglowek.numer)}</invoiceNumber>
@@ -186,7 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
   /**
    * ### NOWA FUNKCJA ZAMIAST `pobierzPlik` ###
    * Otwiera wygenerowany XML w nowej karcie.
-   * Ta metoda działa poprawnie, gdy strona jest na serwerze (GitHub Pages).
    */
   function otworzXMLwNowejKarcie(tresc) {
     const blob = new Blob([tresc], { type: 'application/xml' });
