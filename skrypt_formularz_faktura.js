@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --- GŁÓWNY LISTENER DLA SUBMIT (ZMIENIONY NA ASYNC) ---
   form.addEventListener('submit', async function(event) {
-    event.preventDefault(); // Zawsze zatrzymuj domyślną akcję
+    event.preventDefault(); 
 
     if (walidujFormularz()) {
       console.log('Formularz poprawny! Generowanie XML...');
@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
       // 2. Wygeneruj treść XML na podstawie tych danych
       const trescXML = generujXML(daneDoFaktury);
 
-      // 3. OTWÓRZ XML W NOWEJ KARCIE (ZASTOSOWANA POPRAWKA - Z 'AWAIT')
-      // To zastępuje starą funkcję pobierzPlik()
+      // 3. OTWÓRZ XML W NOWEJ KARCIE
+      
       try {
         await otworzXMLwNowejKarcie(trescXML);
         alert('Rejestracja udana! Faktura XML została wygenerowana w nowej karcie.');
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### GENERATOR XML (Z NAPRAWIONĄ LITERÓWKĄ I ŚCIEŻKĄ) ###
+   * ### GENERATOR XML ###
    */
   function generujXML(daneFormularza) {
     
@@ -191,7 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### NOWA FUNKCJA ZAMIAST `pobierzPlik` (ASYynchroniczna) ###
    * Pobiera XSL, wykonuje transformację i otwiera GOTOWY HTML w nowej karcie.
    */
   async function otworzXMLwNowejKarcie(trescXML) {
@@ -261,3 +260,4 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 });
+
