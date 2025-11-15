@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
   const form = document.getElementById('rejestracjaForm');
 
-  // --- GŁÓWNY LISTENER DLA SUBMIT ---
-  form.addEventListener('submit', function(event) {
+  // --- GŁÓWNY LISTENER DLA SUBMIT (ZMIENIONY NA ASYNC) ---
+  form.addEventListener('submit', async function(event) {
     event.preventDefault(); // Zawsze zatrzymuj domyślną akcję
 
     if (walidujFormularz()) {
@@ -25,11 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
       // 2. Wygeneruj treść XML na podstawie tych danych
       const trescXML = generujXML(daneDoFaktury);
 
-      // 3. OTWÓRZ XML W NOWEJ KARCIE (ZASTOSOWANA POPRAWKA)
+      // 3. OTWÓRZ XML W NOWEJ KARCIE (ZASTOSOWANA POPRAWKA - Z 'AWAIT')
       // To zastępuje starą funkcję pobierzPlik()
-      otworzXMLwNowejKarcie(trescXML);
-      
-      alert('Rejestracja udana! Faktura XML została otwarta w nowej karcie.');
+      try {
+        await otworzXMLwNowejKarcie(trescXML);
+        alert('Rejestracja udana! Faktura XML została wygenerowana w nowej karcie.');
+      } catch (error) {
+        console.error("Nie udało się wygenerować faktury:", error);
+        alert("Wystąpił błąd podczas generowania faktury. Sprawdź konsolę.");
+      }
 
     } else {
       console.log('Formularz zawiera błędy.');
@@ -144,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ### KRYTYCZNA POPRAWKA ŚCIEŻKI ###
     // Musi być pełny adres URL do pliku XSL na Twoim serwerze GitHub.
-    // Skopiowałem go z Twojego pliku strony.html
     const sciezkaDoXSL = "https://zannawalczak.github.io/faktura.xsl";
 
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
@@ -163,10 +166,10 @@ document.addEventListener('DOMContentLoaded', function() {
         <city>${esc(sprzedawca.miasto)}</city>
     </seller>
     <buyer>
-        <name>${esc(nabywcy.nazwa)}</name>
-        <street>${esc(nabywcy.ulica)}</street>
-        <zip>${esc(nabywcy.zip)}</zip>
-        <city>${esc(nabywcy.miasto)}</city>
+        <name>${esc(nabywca.nazwa)}</name>
+        <street>${esc(nabywca.ulica)}</street>
+        <zip>${esc(nabywca.zip)}</zip>
+        <city>${esc(nabywca.miasto)}</city>
     </buyer>
     <items>
 `;
@@ -188,17 +191,47 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### NOWA FUNKCJA ZAMIAST `pobierzPlik` ###
-   * Otwiera wygenerowany XML w nowej karcie.
+   * ### NOWA FUNKCJA ZAMIAST `pobierzPlik` (ASYynchroniczna) ###
+   * Pobiera XSL, wykonuje transformację i otwiera GOTOWY HTML w nowej karcie.
    */
-  function otworzXMLwNowejKarcie(tresc) {
-    const blob = new Blob([tresc], { type: 'application/xml' });
-    const url = URL.createObjectURL(blob);
-    window.open(url);
-    // Zwolnienie pamięci po chwili
-    setTimeout(() => {
-        URL.revokeObjectURL(url);
-    }, 1000);
+  async function otworzXMLwNowejKarcie(trescXML) {
+    try {
+        // 1. Pobierz plik XSL z serwera
+        const sciezkaDoXSL = "https://zannawalczak.github.io/faktura.xsl";
+        const response = await fetch(sciezkaDoXSL);
+        
+        if (!response.ok) {
+            throw new Error(`Nie można pobrać XSL: ${response.statusText}`);
+        }
+        
+        const xslText = await response.text();
+
+        // 2. Sparsuj tekst XML i XSL do obiektów Document
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(trescXML, "application/xml");
+        const xslDoc = parser.parseFromString(xslText, "application/xml");
+
+        // 3. Użyj Procesora XSLT
+        const xsltProcessor = new XSLTProcessor();
+        xsltProcessor.importStylesheet(xslDoc);
+        
+        // 4. Wykonaj transformację
+        const resultDocument = xsltProcessor.transformToFragment(xmlDoc, document);
+
+        // 5. Otwórz wynik HTML w nowej karcie
+        const nowaKarta = window.open();
+        if (!nowaKarta) {
+            throw new Error("Nie można otworzyć nowej karty. Sprawdź blokadę wyskakujących okienek.");
+        }
+        // Dołączamy gotowy fragment HTML (fakturę) do ciała nowego okna
+        nowaKarta.document.body.appendChild(resultDocument);
+        nowaKarta.document.close();
+
+    } catch (error) {
+        console.error("Błąd podczas transformacji XSLT:", error);
+        // Przekaż błąd dalej, aby główna funkcja submit mogła go złapać
+        throw error;
+    }
   }
 
   // --- Funkcje Pomocnicze do pokazywania/czyszczenia błędów ---
@@ -207,10 +240,12 @@ document.addEventListener('DOMContentLoaded', function() {
     errorElement.textContent = wiadomosc;
     errorElement.style.display = 'block';
     const pole = form.elements[nazwaPola];
-    if (pole.type === 'radio') {
-        const grupa = pole[0].closest('.grupa-radio');
+    // Sprawdzenie, czy pole istnieje i ma typ
+    if (pole && pole.type === 'radio') {
+        // Znajdź najbliższy wspólny kontener dla grupy radio
+        const grupa = pole.closest('.grupa-radio') || (pole.length ? pole[0].closest('.grupa-radio') : null);
         if (grupa) grupa.classList.add('invalid');
-    } else {
+    } else if (pole) {
         pole.classList.add('invalid');
     }
   }
