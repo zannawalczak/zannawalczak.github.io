@@ -19,21 +19,16 @@ document.addEventListener('DOMContentLoaded', function() {
         miasto: elementy['miasto'].value,
         ulica: elementy['ulica'].value,
         wojewodztwo: elementy['wojewodztwo'].value,
-        // ### POPRAWIONA LINIA (usunięty zły znak na końcu) ###
-        kodPocztowy: elementy['kod_pocztowy'].value
+        kodPocztowy: elementy['kod_pocztowy'].value 
       };
 
       // 2. Wygeneruj treść XML na podstawie tych danych
       const trescXML = generujXML(daneDoFaktury);
 
-      // 3. Wymuś pobranie pliku "faktura.xml" przez użytkownika
-      pobierzPlik('faktura.xml', trescXML);
-
-      // 4. (Opcjonalnie) Przekieruj na stronę z podziękowaniem
-      // Odkomentuj poniższą linię, jeśli chcesz przekierować
-      // window.location.href = 'podziekowanie.html';
+      // 3. OTWÓRZ XML W NOWEJ KARCIE (ZASTOSOWANA POPRAWKA)
+      otworzXMLwNowejKarcie(trescXML);
       
-      alert('Rejestracja udana! Plik faktura.xml został pobrany.');
+      alert('Rejestracja udana! Faktura XML została otwarta w nowej karcie.');
 
     } else {
       console.log('Formularz zawiera błędy.');
@@ -47,16 +42,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let czyPoprawny = true;
     const elementy = form.elements;
 
-    // === Definicje Wyrażeń Regularnych (Regex) ===
+    // Definicje Wyrażeń Regularnych (Regex)
     const regexLitery = /^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s\-]{2,}$/;
     const regexHaslo = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
     const regexTelefon = /^\d{9}$/;
     const regexUlica = /^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9\s\.\-]{2,}$/;
-    // ### DODANE: Regex dla kodu pocztowego ###
     const regexKodPocztowy = /^\d{2}-\d{3}$/;
 
-    // --- Walidacja poszczególnych pól ---
+    // Walidacja poszczególnych pól
     if (!regexLitery.test(elementy['imie'].value.trim())) {
         pokazBlad('imie', 'Imię musi zawierać co najmniej 2 litery.');
         czyPoprawny = false;
@@ -89,13 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
         pokazBlad('ulica', 'Proszę podać poprawną ulicę i numer.');
         czyPoprawny = false;
     }
-    
-    // ### DODANA WALIDACJA KODU POCZTOWEGO ###
     if (!regexKodPocztowy.test(elementy['kod_pocztowy'].value.trim())) {
         pokazBlad('kod_pocztowy', 'Kod pocztowy musi być w formacie 00-123.');
         czyPoprawny = false;
     }
-    
     if (!regexTelefon.test(elementy['telefon'].value.trim())) {
         pokazBlad('telefon', 'Telefon musi składać się z 9 cyfr.');
         czyPoprawny = false;
@@ -113,8 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### GENERATOR XML (POPRAWIONE WCIĘCIA) ###
+   * ### GENERATOR XML ###
    * Tworzy string XML pasujący do Twojego pliku XSLT.
+   * Używa lokalnej ścieżki do XSLT, bo będzie działać na serwerze.
    */
   function generujXML(daneFormularza) {
     
@@ -143,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const nabywca = {
         nazwa: `${daneFormularza.imie} ${daneFormularza.nazwisko}`,
         ulica: daneFormularza.ulica,
-        zip: daneFormularza.kodPocztowy, // <-- POBIERANE Z FORMULARZA
+        zip: daneFormularza.kodPocztowy,
         miasto: daneFormularza.miasto
     };
 
@@ -151,9 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
         { nazwa: "Opłata rejestracyjna", miara: "szt.", ilosc: 1, cena: 150.00 }
     ];
 
-    // WAŻNE: WCIĘCIA POPRAWIONE NA ZWYKŁE SPACJE
+    // Używamy lokalnej ścieżki do faktura.xsl
+    // To będzie działać idealnie na GitHub Pages.
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://zannawalczak.github.io/faktura.xsl"?>
+<?xml-stylesheet type="text/xsl" href="faktura.xsl"?>
 <invoice>
     <header>
         <invoiceNumber>${esc(naglowek.numer)}</invoiceNumber>
@@ -193,18 +186,17 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * Funkcja wymuszająca pobranie pliku przez przeglądarkę.
+   * NOWA FUNKCJA: Otwiera wygenerowany XML w nowej karcie.
+   * Ta metoda działa poprawnie, gdy strona jest na serwerze (nawet lokalnym).
    */
-  function pobierzPlik(nazwaPliku, tresc) {
+  function otworzXMLwNowejKarcie(tresc) {
     const blob = new Blob([tresc], { type: 'application/xml' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = nazwaPliku;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    window.open(url);
+    // Zwolnienie pamięci po chwili
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+    }, 1000);
   }
 
   // --- Funkcje Pomocnicze do pokazywania/czyszczenia błędów ---
