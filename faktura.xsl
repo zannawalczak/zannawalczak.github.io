@@ -13,7 +13,7 @@
             position: relative;
             width: 868px;
             height: 614px;
-            background: url('faktura.png') no-repeat;
+            background: url('https://zannawalczak.github.io/faktura.png') no-repeat;
             background-size: contain;
         }
         .Rectangle_12 {
@@ -314,4 +314,5 @@
 </body>
 </html>
     </xsl:template>
+
 </xsl:stylesheet>
