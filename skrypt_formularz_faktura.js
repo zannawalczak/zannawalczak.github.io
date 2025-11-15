@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const trescXML = generujXML(daneDoFaktury);
 
       // 3. OTWÓRZ XML W NOWEJ KARCIE (ZASTOSOWANA POPRAWKA)
+      // To zastępuje starą funkcję pobierzPlik()
       otworzXMLwNowejKarcie(trescXML);
       
       alert('Rejestracja udana! Faktura XML została otwarta w nowej karcie.');
@@ -104,9 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### GENERATOR XML ###
-   * Tworzy string XML pasujący do Twojego pliku XSLT.
-   * Używa lokalnej ścieżki do XSLT, bo będzie działać na serwerze.
+   * ### GENERATOR XML (Z NAPRAWIONĄ LITERÓWKĄ) ###
    */
   function generujXML(daneFormularza) {
     
@@ -143,8 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { nazwa: "Opłata rejestracyjna", miara: "szt.", ilosc: 1, cena: 150.00 }
     ];
 
-    // Używamy lokalnej ścieżki do faktura.xsl
-    // To będzie działać idealnie na GitHub Pages.
+    // Używamy ścieżki względnej. To jest poprawne dla GitHub Pages.
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="faktura.xsl"?>
 <invoice>
@@ -186,8 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * NOWA FUNKCJA: Otwiera wygenerowany XML w nowej karcie.
-   * Ta metoda działa poprawnie, gdy strona jest na serwerze (nawet lokalnym).
+   * ### NOWA FUNKCJA ZAMIAST `pobierzPlik` ###
+   * Otwiera wygenerowany XML w nowej karcie.
+   * Ta metoda działa poprawnie, gdy strona jest na serwerze (GitHub Pages).
    */
   function otworzXMLwNowejKarcie(tresc) {
     const blob = new Blob([tresc], { type: 'application/xml' });
