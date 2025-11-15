@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
         miasto: elementy['miasto'].value,
         ulica: elementy['ulica'].value,
         wojewodztwo: elementy['wojewodztwo'].value,
-        // ### ZAKTUALIZOWANE: Pobieranie kodu pocztowego ###
-        kodPocztowy: elementy['kod_pocztowy'].value 
+        // ### POPRAWIONA LINIA (usunięty zły znak na końcu) ###
+        kodPocztowy: elementy['kod_pocztowy'].value
       };
 
       // 2. Wygeneruj treść XML na podstawie tych danych
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   /**
-   * ### GENERATOR XML (ZAKTUALIZOWANY) ###
+   * ### GENERATOR XML (POPRAWIONE WCIĘCIA) ###
    * Tworzy string XML pasujący do Twojego pliku XSLT.
    */
   function generujXML(daneFormularza) {
@@ -140,8 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
         rok: dzis.getFullYear()
     };
 
-    // ### ZAKTUALIZOWANY NABYWCA ###
-    // Używa `daneFormularza.kodPocztowy`
     const nabywca = {
         nazwa: `${daneFormularza.imie} ${daneFormularza.nazwisko}`,
         ulica: daneFormularza.ulica,
@@ -153,8 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { nazwa: "Opłata rejestracyjna", miara: "szt.", ilosc: 1, cena: 150.00 }
     ];
 
-    // WAŻNE: Poniższa linia łączy ten XML z Twoim plikiem XSLT
-    // Upewnij się, że plik XSLT nazywa się 'faktura.xsl'
+    // WAŻNE: WCIĘCIA POPRAWIONE NA ZWYKŁE SPACJE
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="https://zannawalczak.github.io/faktura.xsl"?>
 <invoice>
@@ -233,6 +230,5 @@ document.addEventListener('DOMContentLoaded', function() {
       el.classList.remove('invalid');
     });
   }
-
 
 });
