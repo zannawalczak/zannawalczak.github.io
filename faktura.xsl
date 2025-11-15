@@ -308,7 +308,7 @@
                 </div>
             </xsl:for-each>
         </div>
-        <a href="fakturakod.txt">kod</a>
+        <a href="faktura_kod.txt">kod</a>
     </div>
     
 </body>
@@ -316,3 +316,4 @@
     </xsl:template>
 
 </xsl:stylesheet>
+
