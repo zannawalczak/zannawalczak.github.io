@@ -2,14 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
       
   const form = document.getElementById('rejestracjaForm');
 
-  // --- GŁÓWNY LISTENER DLA SUBMIT (ZMIENIONY NA ASYNC) ---
+  
   form.addEventListener('submit', async function(event) {
     event.preventDefault(); 
 
     if (walidujFormularz()) {
       console.log('Formularz poprawny! Generowanie XML...');
 
-      // 1. Zbierz dane z formularza do obiektu
+      
       const elementy = form.elements;
       const daneDoFaktury = {
         imie: elementy['imie'].value,
@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
         kodPocztowy: elementy['kod_pocztowy'].value 
       };
 
-      // 2. Wygeneruj treść XML na podstawie tych danych
+      
       const trescXML = generujXML(daneDoFaktury);
 
-      // 3. OTWÓRZ XML W NOWEJ KARCIE
+      
       
       try {
         await otworzXMLwNowejKarcie(trescXML);
@@ -41,13 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 
-  // --- GŁÓWNA FUNKCJA WALIDUJĄCA ---
+  
   function walidujFormularz() {
     czyscBledy();
     let czyPoprawny = true;
     const elementy = form.elements;
 
-    // Definicje Wyrażeń Regularnych (Regex)
+    
     const regexLitery = /^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s\-]{2,}$/;
     const regexHaslo = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const regexUlica = /^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9\s\.\-]{2,}$/;
     const regexKodPocztowy = /^\d{2}-\d{3}$/;
 
-    // Walidacja poszczególnych pól
+    
     if (!regexLitery.test(elementy['imie'].value.trim())) {
         pokazBlad('imie', 'Imię musi zawierać co najmniej 2 litery.');
         czyPoprawny = false;
@@ -108,9 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return czyPoprawny;
   }
 
-  /**
-   * ### GENERATOR XML ###
-   */
+  
   function generujXML(daneFormularza) {
     
     const esc = (str) => {
@@ -146,8 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { nazwa: "Opłata rejestracyjna", miara: "szt.", ilosc: 1, cena: 150.00 }
     ];
 
-    // ### KRYTYCZNA POPRAWKA ŚCIEŻKI ###
-    // Musi być pełny adres URL do pliku XSL na Twoim serwerze GitHub.
+    
     const sciezkaDoXSL = "https://zannawalczak.github.io/faktura.xsl";
 
     let xmlString = `<?xml version="1.0" encoding="UTF-8"?>
@@ -190,12 +187,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return xmlString;
   }
 
-  /**
-   * Pobiera XSL, wykonuje transformację i otwiera GOTOWY HTML w nowej karcie.
-   */
+  
   async function otworzXMLwNowejKarcie(trescXML) {
     try {
-        // 1. Pobierz plik XSL z serwera
+        
         const sciezkaDoXSL = "https://zannawalczak.github.io/faktura.xsl";
         const response = await fetch(sciezkaDoXSL);
         
@@ -205,43 +200,43 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const xslText = await response.text();
 
-        // 2. Sparsuj tekst XML i XSL do obiektów Document
+        
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(trescXML, "application/xml");
         const xslDoc = parser.parseFromString(xslText, "application/xml");
 
-        // 3. Użyj Procesora XSLT
+        
         const xsltProcessor = new XSLTProcessor();
         xsltProcessor.importStylesheet(xslDoc);
         
-        // 4. Wykonaj transformację
+        
         const resultDocument = xsltProcessor.transformToFragment(xmlDoc, document);
 
-        // 5. Otwórz wynik HTML w nowej karcie
+        
         const nowaKarta = window.open();
         if (!nowaKarta) {
             throw new Error("Nie można otworzyć nowej karty. Sprawdź blokadę wyskakujących okienek.");
         }
-        // Dołączamy gotowy fragment HTML (fakturę) do ciała nowego okna
+        
         nowaKarta.document.body.appendChild(resultDocument);
         nowaKarta.document.close();
 
     } catch (error) {
         console.error("Błąd podczas transformacji XSLT:", error);
-        // Przekaż błąd dalej, aby główna funkcja submit mogła go złapać
+        
         throw error;
     }
   }
 
-  // --- Funkcje Pomocnicze do pokazywania/czyszczenia błędów ---
+  
   function pokazBlad(nazwaPola, wiadomosc) {
     const errorElement = document.getElementById(nazwaPola + '-error');
     errorElement.textContent = wiadomosc;
     errorElement.style.display = 'block';
     const pole = form.elements[nazwaPola];
-    // Sprawdzenie, czy pole istnieje i ma typ
+    
     if (pole && pole.type === 'radio') {
-        // Znajdź najbliższy wspólny kontener dla grupy radio
+        
         const grupa = pole.closest('.grupa-radio') || (pole.length ? pole[0].closest('.grupa-radio') : null);
         if (grupa) grupa.classList.add('invalid');
     } else if (pole) {
@@ -260,4 +255,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 });
+
 
